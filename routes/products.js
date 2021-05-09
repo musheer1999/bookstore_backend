@@ -7,7 +7,8 @@ const User = require("../models/User");
 const AWS = require("aws-sdk");
 const Admin = require("../models/Admin");
 const { orderBy } = require("lodash");
-
+const Razorpay = require("razorpay");
+const shortid =require("shortid")
 const adminId = "5ecfee89a3980b4c8605df52";
 
 const s3 = new AWS.S3({
@@ -516,7 +517,28 @@ order.save().then((order)=>{
 }) 
 
 
+router.get("/razorpay", async (req,res)=>{
 
+  const payment_capture =1
+  const amount = 400
+  const currency = "INR" 
+ 
+  const options = {amount:"49900",
+     currency,
+      receipt:shortid.generate(),
+       payment_capture}
+try{ const response= await razorpay.orders.create(options)
+ console.log(response)
+return res.json({
+     id:response.id,
+     currency:'INR',
+     amount:response.amount
+ })} catch(error){
+  res.json({
+      id:"response.id,"
+  })
+ }
+})
 
 
 module.exports = router;
